@@ -1,7 +1,7 @@
 const express = require('express');
 const router  = express.Router();
 const Produto = require('../app/models/product');
-const Categoria = require('../app/models/product');
+//const Categoria = require('../app/models/product');
 //const mongoose = require('mongoose');
 
 // rotas para Produto
@@ -11,6 +11,7 @@ router.post('/', function (req,res){
     produto.nome = req.body.nome;
     produto.preco = req.body.preco;
     produto.descricao = req.body.descricao;
+    produto.categoria = req.body.categoria;
 
     produto.save(function(error){
         if(error)
@@ -28,7 +29,7 @@ router.get('/', function (req,res){
 
         res.status(200).json({
             message:"Retorno de todos os produtos", allProducts: prods
-        });   
+        }); 
     });
 });
 
@@ -79,7 +80,7 @@ router.put('/:productId',function(req,res){
 router.delete('/:productId', function (req, res){
     Produto.findByIdAndRemove(req.params.productId,(error,produto)=>{
         if(error)
-           res.status(500).send("Erro so deletar ", error);
+           res.status(500).send("Erro ao excluir produto", error);
 
         const response ={
             message: "Produto excluído com sucesso!",
