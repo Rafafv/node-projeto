@@ -3,7 +3,7 @@ const router = express.Router();
 
 
 router.use(function(req, res, next){
-    console.log("Interceptação pelo middleware ok"); //autenticacoes
+    console.log("Interceptação pelo middleware"); //autenticacoes
     next();
 });
 

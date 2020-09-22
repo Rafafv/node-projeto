@@ -1,12 +1,15 @@
 const mongoose =require('mongoose');
-//const categoria = require('category');
 const Schema = mongoose.Schema;
 
 const produtoSchema = new Schema({
     nome: String,
     preco: Number,
     descricao: String,
-    categoria: { type: Schema.Types.ObjectId, ref: 'Categoria' }
+    categoria: { type: mongoose.Schema.Types.ObjectId, ref: 'Categoria' }
 });
 
-module.exports = mongoose.model('Produto', produtoSchema);
+
+//const prod = mongoose.model('Produto', produtoSchema);
+//const cat = mongoose.model('Categoria', categoriaSchema);
+
+module.exports =  mongoose.model('Produto', produtoSchema);

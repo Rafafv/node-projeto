@@ -1,7 +1,8 @@
 const express = require('express');
 const router  = express.Router();
 const Produto = require('../app/models/product');
-//const Categoria = require('../app/models/product');
+const Categoria = require('../app/models/category');
+
 //const mongoose = require('mongoose');
 
 // rotas para Produto
@@ -23,15 +24,10 @@ router.post('/', function (req,res){
 
 //get localhost:3000/api/produtos
 router.get('/', function (req,res){
-    Produto.find(function(error, prods){
-        if(error)
-           res.send(error);
-
-        res.status(200).json({
-            message:"Retorno de todos os produtos", allProducts: prods
-        }); 
+       produtos =  Produto.find().populate('categoria');
+       res.status(200).json(produtos); 
     });
-});
+
 
 //getbyId localhost:3000/api/produtos/Id
 router.get('/:productId', function (req,res){
