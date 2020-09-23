@@ -9,7 +9,4 @@ const produtoSchema = new Schema({
 });
 
 
-//const prod = mongoose.model('Produto', produtoSchema);
-//const cat = mongoose.model('Categoria', categoriaSchema);
-
 module.exports =  mongoose.model('Produto', produtoSchema);

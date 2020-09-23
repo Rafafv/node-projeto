@@ -3,16 +3,76 @@ const router  = express.Router();
 const Produto = require('../app/models/product');
 const Categoria = require('../app/models/category');
 
-//const mongoose = require('mongoose');
-
 // rotas para Produto
-//post localhost:3000/api/produtos
+//rota -> post localhost:3000/api/produtos
+router.post("/", async (req, res) => {
+    const {nome,preco,descricao} = req.body;
+    id = req.body.categoria;
+    const produto = await Produto.create({nome,preco,descricao, categoria: id});
+
+    await produto.save(function(error){
+        if(error)
+          res.send("erro ao tentar salvar", error)
+
+        res.status(201).json({message: "Produto inserido com sucesso"});
+    })
+
+})
+
+
+//rota -> get localhost:3000/api/produtos
+router.get("/", async (req, res) => {
+    const produto = await Produto.find().populate('categoria');
+    return res.send({produto});
+})
+
+//rota get com parametro -> getbyId localhost:3000/api/produtos/Id
+router.get("/:productId", async (req, res) => {
+    const produto = await Produto.findById(req.params.productId).populate('categoria');
+    return res.send({produto});
+})
+
+//rota -> putbyId localhost:3000/api/produtos/Id
+router.put("/:productId", async (req, res) => {
+    const produtoId = req.params.productId;
+    const categoriaId  = req.body.categoria;
+     // console.log(produtoId);
+    Produto.findById(produtoId, function(error, produto){
+        if(error){
+            res.status(500).json({message:"Erro ao tentar encontrar produto"});
+        }
+        else if(produto == null){
+            res.status(400).json({message:"Produto não encontrado para o Id: ", produtoId});
+        }
+        else{
+            produto.nome = req.body.nome;
+            produto.preco = req.body.preco;
+            produto.descricao = req.body.descricao;
+            produto.categoria = categoriaId;
+            produto.save(function(error){
+                if(error)
+                   res.send("Erro ao tentar atualizar produto", error);
+
+                res.status(200).json({message:"Produto atualizado com sucesso"}); 
+            })
+           
+        }
+    });
+})
+
+//rota -> deletebyId localhost:3000/api/produtos/Id
+router.delete("/:productId", async (req, res) => {
+    const produto = await Produto.findByIdAndRemove(req.params.productId);
+    return res.send("Produto excluído com sucesso!");
+})
+/*
 router.post('/', function (req,res){
     const produto = new Produto();
+    const categoria = new Categoria();
     produto.nome = req.body.nome;
     produto.preco = req.body.preco;
     produto.descricao = req.body.descricao;
-    produto.categoria = req.body.categoria;
+    categoria.categoria = req.body.categoria.id;
 
     produto.save(function(error){
         if(error)
@@ -24,9 +84,13 @@ router.post('/', function (req,res){
 
 //get localhost:3000/api/produtos
 router.get('/', function (req,res){
-       produtos =  Produto.find().populate('categoria');
-       res.status(200).json(produtos); 
-    });
+    Produto.find().populate('categoria'),(err, prod) => {
+        if (err) handleError(res, err.message, 'Failed ')
+        res.status(200).json(prod)   
+        console.log(req.params)
+  
+    }
+});
 
 
 //getbyId localhost:3000/api/produtos/Id
@@ -84,6 +148,6 @@ router.delete('/:productId', function (req, res){
         };
         return res.status(200).send(response);
     });
-});
+});*/
 
 module.exports = router;
