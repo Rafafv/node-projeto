@@ -10,7 +10,7 @@ exports.post = async (req, res)=>{
             preco: req.body.preco,
             descricao:req.body.descricao
         });
-        res.status(200).send({
+        res.status(201).send({
             message: 'Produto cadastrado com sucesso!'
         });
     }

@@ -20,6 +20,7 @@ const productRoute = require('./src/routes/product-route');
 const categoryRoute = require('./src/routes/categoria-route');
 const indexRoute = require('./src/routes/index-route');
 const customersRoute = require('./src/routes/customer-route');
+const loginRoute = require('./src/routes/login-route');
 
 //rota principal
 app.use('/api', indexRoute);
@@ -30,6 +31,9 @@ app.use('/api/produtos/', productRoute);
 app.use('/api/categorias/', categoryRoute);
 //rota para customer
 app.use('/api/customers/', customersRoute);
+//rota para login
+app.use('/api/login/', loginRoute);
+
 
 app.listen(port, ()=>{
     console.log("server is up and running...on port ", port);

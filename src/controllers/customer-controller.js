@@ -9,7 +9,7 @@ exports.post = async (req, res)=>{
             email: req.body.email,
             password:req.body.password
         });
-        res.status(200).send({
+        res.status(201).send({
             message: 'Customer cadastrado com sucesso!'
         });
     }
@@ -64,7 +64,7 @@ exports.put = async (req, res)=>{
 
 exports.delete = async (req, res)=>{
  try {
-    const id = req.params.productId;
+    const id = req.params.customerId;
     await repository.delete(id);
      res.status(200).send({
         message: "Produto atualizado com sucesso!", dados:data
@@ -75,3 +75,13 @@ exports.delete = async (req, res)=>{
     });
  }
 };
+
+exports.customerRegister = async(req,res) =>{
+    try {
+        await repository.register(req.body.name,req.body.email,req.body.password);
+        res.status(201).send({message: "Usuário registrado com sucesso!"})
+    } catch (error) {
+        
+        res.status(500).send({message: "Erro ao registrar usuário"});
+    }
+}

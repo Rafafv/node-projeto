@@ -22,9 +22,9 @@ exports.getById = async(id) =>{
 exports.put = async(id,data) =>{
     await Customer.findByIdAndUpdate(id,{
         $set:{
-            nome:data.name,
-            preco:data.email,
-            descricao:data.password
+            name:data.name,
+            email:data.email,
+            password:data.password
         }
     });
 };
@@ -33,3 +33,30 @@ exports.put = async(id,data) =>{
 exports.delete = async(id)=>{
     await Customer.findByIdAndDelete(id);
 }
+
+exports.register = async(name,mail,pass) =>{
+    const result = await Customer.find({email: mail});
+    if(result.length > 0){
+        throw{
+            status:400,
+            message: "usuário ja existente"
+        }
+    }
+
+    const customer = new Customer();
+    customer.name = name;
+    customer.email = mail;
+    customer.password = customer.generateHash(pass);
+
+    customer.save((err,res)=>{
+        if(err){
+            return res.send({
+                success: false,
+                message: "Error on save"
+            });
+        }
+    });
+    return {customer: customer};
+};
+
+
