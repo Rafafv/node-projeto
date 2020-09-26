@@ -19,6 +19,7 @@ const router = express.Router(); // intercepta todas as rotas
 const productRoute = require('./src/routes/product-route');
 const categoryRoute = require('./src/routes/categoria-route');
 const indexRoute = require('./src/routes/index-route');
+const customersRoute = require('./src/routes/customer-route');
 
 //rota principal
 app.use('/api', indexRoute);
@@ -27,6 +28,8 @@ app.use('/api', indexRoute);
 app.use('/api/produtos/', productRoute);
 // rota para categoria
 app.use('/api/categorias/', categoryRoute);
+//rota para customer
+app.use('/api/customers/', customersRoute);
 
 app.listen(port, ()=>{
     console.log("server is up and running...on port ", port);
