@@ -16,15 +16,16 @@ const port = process.env.PORT || 3000;
 
 // definindo as rotas
 const router = express.Router(); // intercepta todas as rotas
-const productRoute = require('./routes/product-route');
-const categoryRoute = require('./routes/categoria-route');
-const indexRoute = require('./routes/index-route');
+const productRoute = require('./src/routes/product-route');
+const categoryRoute = require('./src/routes/categoria-route');
+const indexRoute = require('./src/routes/index-route');
 
 //rota principal
 app.use('/api', indexRoute);
 
 //rota para produto
 app.use('/api/produtos/', productRoute);
+// rota para categoria
 app.use('/api/categorias/', categoryRoute);
 
 app.listen(port, ()=>{
