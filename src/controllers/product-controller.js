@@ -2,12 +2,12 @@ const Produto = require('../app/models/product');
 const Categoria = require('../app/models/category');
 
 
-exports.post = function await (req, res){
+exports.post = async function (req, res){
     const {nome,preco,descricao} = req.body;
     id = req.body.categoria;
     const produto = await Produto.create({nome,preco,descricao, categoria: id});
 
-    await produto.save(function(error){
+   await produto.save(function(error){
         if(error)
           res.send("erro ao tentar salvar", error)
 
@@ -16,17 +16,17 @@ exports.post = function await (req, res){
 
 };
 
-exports.getAll = function async (req, res){
-    const produto = await Produto.find().populate('categoria');
+exports.getAll = async function(req, res){
+    const produto = Produto.find().populate('categoria');
     return res.send({produto});
 };
 
-exports.getById = function  async (req, res){
+exports.getById = async function(req, res){
     const produto = await Produto.findById(req.params.productId).populate('categoria');
     return res.send({produto});
 };
 
-exports.put = function  async (req, res){
+exports.put = async function (req, res){
     const produtoId = req.params.productId;
     const categoriaId  = req.body.categoria;
      // console.log(produtoId);
@@ -53,7 +53,7 @@ exports.put = function  async (req, res){
     });
 };
 
-exports.delete = function  async (req, res){
+exports.delete = async function (req, res){
     const produto = await Produto.findByIdAndRemove(req.params.productId);
     return res.send("Produto excluído com sucesso!");
 };
