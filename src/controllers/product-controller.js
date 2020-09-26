@@ -1,87 +1,80 @@
 const Produto = require('../app/models/product');
+const repository = require('../repositories/product-repository');
 
-exports.post = function (req, res){
-    const produto = new Produto();
-  //  const categoria = new Categoria();
-    produto.nome = req.body.nome;
-    produto.preco = req.body.preco;
-    produto.descricao = req.body.descricao;
-   // categoria.categoria = req.body.categoria.id;
-
-    produto.save(function(error){
-        if(error)
-          res.send(`Erro ao excluir produto error, ${error}`)
-
-        res.status(201).json({message: "Produto inserido com sucesso"});
-    })
+// await para tentar , async funcao assincrona
+exports.post = async (req, res)=>{
+   
+    try{
+        await repository.post({
+            nome: req.body.nome,
+            preco: req.body.preco,
+            descricao:req.body.descricao
+        });
+        res.status(200).send({
+            message: 'Produto cadastrado com sucesso!'
+        });
+    }
+    catch(error){
+        console.log(error);
+        res.status(500).send({
+            message: 'Falha ao processar requisição'
+        })
+    }
+ 
 };
 
-exports.getAll = function(req, res){
-    Produto.find(function(error, produto){
-        if(error){
-            res.status(500).json({message:"Erro ao tentar encontrar produto"});
-        }
-        else{
-            res.status(200).json({message:"Retorno de todos os produtos", produto: produto}); 
-        }
-         
-    });
+exports.getAll = async (req, res) =>{
+   try {
+        const data = await repository.getAll();
+        res.status(200).send(data);
+   } catch (error) {
+       res.status(500).send({
+           message: "Falha ao processar requisição", erro:error
+       });
+   }
 };
 
-exports.getById = async function(req, res){
+exports.getById = async (req, res)=>{
+try {
     const id = req.params.productId;
-    Produto.findById(id,function(error, produto){
-        if(error){
-            res.status(500).json({message:"Erro ao tentar encontrar produto"});
-        }
-        else if(produto == null){
-            res.status(400).json({message:"Produto não encontrado para o Id: ", id});
-        }
-        else{
-            res.status(200).json({message:"Retorno de todos os produtos", produto: produto}); 
-        }
-         
+    const data = await repository.getById(id);
+    res.status(200).send(data);
+} catch (error) {
+    res.status(500).send({
+        message: "Falha ao processar requisição", erro:error
     });
+}
 };
 
 
-exports.put = async function (req, res){
+exports.put = async (req, res)=>{
+   
+    try {
+        const id = req.params.productId;
+        const data = await repository.put(id);
+        res.status(200).send({
+            message: "Produto atualizado com sucesso!", dados:data
+        });
+    } catch (error) {
+        res.status(500).send({
+            message: "Falha ao processar requisição", erro:error
+        });
+    }
+};
+
+
+exports.delete = async (req, res)=>{
+ try {
     const id = req.params.productId;
-    console.log(id);
-    Produto.findById(id, function(error, produto){
-        if(error){
-            res.status(500).json({message:"Erro ao tentar encontrar produto"});
-        }
-        else if(produto == null){
-            res.status(400).json({message:"Produto não encontrado para o Id: ", id});
-        }
-        else{
-            produto.nome = req.body.nome;
-            produto.preco = req.body.preco;
-            produto.descricao = req.body.descricao;
-            produto.save(function(error){
-                if(error)
-                   res.send(`Erro ao excluir produto error, ${error}`);
-
-                res.status(200).json({message:"Produto atualizado com sucesso"}); 
-            })
-           
-        }
+    await repository.delete(id);
+     res.status(200).send({
+        message: "Produto atualizado com sucesso!", dados:data
     });
-};
-
-
-exports.delete = async function (req, res){
-    Produto.findByIdAndRemove(req.params.productId,(error,produto)=>{
-        if(error)
-           res.status(500).send(`Erro ao excluir produto error, ${error}`);
-
-        const response ={
-            message: "Produto excluído com sucesso!",
-            id: produto.id
-        };
-        return res.status(200).send(response);
+ } catch (error) {
+    res.status(500).send({
+        message: "Falha ao processar requisição", erro:error
     });
+ }
 };
 
 

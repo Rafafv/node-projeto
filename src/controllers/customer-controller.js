@@ -1,45 +1,77 @@
-const Customer = require('../app/models/customer');
+const customer = require('../app/models/customer');
+const repository= require('../repositories/customer-repository');
 
-exports.post = function (req, res){
-    const customer = new Customer();
-    customer.name = req.body.name;
-    customer.email = req.body.email;
-    customer.password = req.body.password;
+exports.post = async (req, res)=>{
    
-    customer.save(function(error){
-        if(error)
-          res.send(`Erro ao excluir, ${error}`)
-
-        res.status(201).json({message: "Inserido com sucesso"});
-    })
+    try{
+        await repository.post({
+            name: req.body.name,
+            email: req.body.email,
+            password:req.body.password
+        });
+        res.status(200).send({
+            message: 'Customer cadastrado com sucesso!'
+        });
+    }
+    catch(error){
+        console.log(error);
+        res.status(500).send({
+            message: 'Falha ao processar requisição'
+        })
+    }
+ 
 };
 
-
-exports.getAll = function(req, res){
-    Customer.find(function(error, cust){
-        if(error){
-            res.status(500).json({message:"Erro ao tentar encontrar"});
-        }
-        else{
-            res.status(200).json({message:"Retorno de todos customers", customer: cust}); 
-        }
-         
-    });
+exports.getAll = async (req, res) =>{
+   try {
+        const data = await repository.getAll();
+        res.status(200).send(data);
+   } catch (error) {
+       res.status(500).send({
+           message: "Falha ao processar requisição", erro:error
+       });
+   }
 };
 
-
-exports.getById = function(req, res){
+exports.getById = async (req, res)=>{
+try {
     const id = req.params.customerId;
-    Customer.findById(id,function(error, cust){
-        if(error){
-            res.status(500).json({message:"Erro ao tentar encontrar"});
-        }
-        else if(cust == null){
-            res.status(400).json({message:"Customer não encontrado"});
-        }
-        else{
-            res.status(200).json({message:"Retorno de todos os customers",  customer: cust}); 
-        }
-         
+    const data = await repository.getById(id);
+    res.status(200).send(data);
+} catch (error) {
+    res.status(500).send({
+        message: "Falha ao processar requisição", erro:error
     });
+}
+};
+
+
+exports.put = async (req, res)=>{
+   
+    try {
+        const id = req.params.productId;
+        const data = await repository.put(id);
+        res.status(200).send({
+            message: "Customer atualizado com sucesso!", dados:data
+        });
+    } catch (error) {
+        res.status(500).send({
+            message: "Falha ao processar requisição", erro:error
+        });
+    }
+};
+
+
+exports.delete = async (req, res)=>{
+ try {
+    const id = req.params.productId;
+    await repository.delete(id);
+     res.status(200).send({
+        message: "Produto atualizado com sucesso!", dados:data
+    });
+ } catch (error) {
+    res.status(500).send({
+        message: "Falha ao processar requisição", erro:error
+    });
+ }
 };
