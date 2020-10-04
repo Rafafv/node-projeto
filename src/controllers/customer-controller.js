@@ -37,7 +37,14 @@ exports.getById = async (req, res)=>{
 try {
     const id = req.params.customerId;
     const data = await repository.getById(id);
-    res.status(200).send(data);
+    
+    if(data == null){
+        res.status(400).json({message:"Customer não encontrado"});
+    }
+    else{
+        res.status(200).send(data);
+    }
+   
 } catch (error) {
     res.status(500).send({
         message: "Falha ao processar requisição", erro:error

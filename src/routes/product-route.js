@@ -6,7 +6,7 @@ const authService = require('../services/auth-service');
 
 // rotas para Produto
 //rota -> post localhost:3000/api/produtos
-router.post("/",authService.authorize, productController.post);
+router.post("/", productController.post);
 
 //rota -> get localhost:3000/api/produtos
 router.get("/", productController.getAll);

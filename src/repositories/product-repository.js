@@ -9,7 +9,8 @@ exports.post = async(data) =>{
 //GET
 exports.getAll = async () =>{
     const res = await Produto.find();
-    return res;
+    const count = res.length;
+    return ({quantide:count,res:res});
 };
 
 //GETBYID
