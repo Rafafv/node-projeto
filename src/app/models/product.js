@@ -8,5 +8,4 @@ const produtoSchema = new Schema({
   //  categoria: { type: mongoose.Schema.Types.ObjectId, ref: 'Categoria' }
 });
 
-
 module.exports =  mongoose.model('Produto', produtoSchema);
