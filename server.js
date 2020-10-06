@@ -4,7 +4,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-const mongoose_morgan = require('mongoose-morgan');
+
 
 
 // configurando o app para usar o body-parse e transformar as req em JSON
@@ -18,23 +18,6 @@ mongoose.connect(connectionString,{useNewUrlParser:true, useUnifiedTopology: tru
 // definindo porta onde o server vai responder
 const port = process.env.PORT || 3000;
 
-//config morgan logs
-const mongo_morgan = mongoose_morgan(  
-                {   
-                collection: 'logs',    
-                connectionString: connectionString 
-                },
-                {
-                    skip: function (req, res) {
-                        return res.statusCode = 201;
-                    }
-                   },
-                'dev'
-); 
-
-//logs 
-morgan('dev');
-app.use(mongo_morgan);
 
 // definindo as rotas
 const router = express.Router(); // intercepta todas as rotas

@@ -4,6 +4,8 @@ const Produto = require('../app/models/product');
 exports.post = async(data) =>{
     const produto = new Produto(data);
     await produto.save();
+   
+  
 };
 
 //GET

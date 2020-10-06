@@ -1,5 +1,7 @@
 const Produto = require('../app/models/product');
 const repository = require('../repositories/product-repository');
+const mongoMorgan = require('mongo-morgan')
+
 
 // await para tentar , async funcao assincrona
 exports.post = async (req, res)=>{
@@ -10,9 +12,15 @@ exports.post = async (req, res)=>{
             preco: req.body.preco,
             descricao:req.body.descricao
         });
+        mongoMorgan('mongodb+srv://root:aula@cluster0.onwku.mongodb.net/dbLogs?retryWrites=true&w=majority', 'combined', {
+            collection: 'logs',
+            skip : function (req, res) { return res.statusCode != 201 }      
+          })
         res.status(201).send({
             message: 'Produto cadastrado com sucesso!'
         });
+      
+       
     }
     catch(error){
         console.log(error);
