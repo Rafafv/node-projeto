@@ -1,6 +1,6 @@
 const customer = require('../app/models/customer');
 const repository= require('../repositories/customer-repository');
-
+const log= require('../repositories/logs-repository');
 exports.post = async (req, res)=>{
    
     try{
@@ -8,6 +8,11 @@ exports.post = async (req, res)=>{
             name: req.body.name,
             email: req.body.email,
             password:req.body.password
+        });
+        await log.logs({
+            method:'POST',
+            name: req.body.name,
+            email: req.body.email,
         });
         res.status(201).send({
             message: 'Customer cadastrado com sucesso!'

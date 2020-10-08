@@ -21,4 +21,4 @@ customerSchema.methods.validPassword = function(password){
     return bcrypt.compareSync(password, this.password);
 }
 
-module.exports =  mongoose.model('Customer', customerSchema);
+module.exports =  DB_PRINCIPAL.model('Customer', customerSchema);
